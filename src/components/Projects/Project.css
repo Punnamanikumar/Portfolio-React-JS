@@ -274,4 +274,7 @@
       .password > button{
         margin-left: 3rem;
       }
+      .wrongpasscode{
+        display: none;
+      }
   }

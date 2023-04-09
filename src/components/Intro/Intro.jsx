@@ -21,13 +21,19 @@ const Intro = () => {
   const [openPopup,setOpenPopup] = useState(false)
   const [password, setPassword] = useState("");
   const [passwordField, setPasswordField] = useState(null);
+  const [errorField, setErrorField] = useState(false);
   const theme = useContext(themeContext);
   const darkMode = theme.state.darkMode;
 
   const handelPassword = (e) => {
     e.preventDefault();
     setOpenPopup(true);
+    setErrorField(false)
     if (password !== process.env.REACT_APP_ACCESS_PASSWORD) {
+      if (password.length) {
+        setErrorField(true);
+        setPassword("");
+      } else setErrorField(false);
       return passwordField.classList.add("error");
     }
     setOpenPopup(false);
@@ -36,16 +42,17 @@ const Intro = () => {
   };
   return (
     <div className="Intro" id="Intro">
-      { openPopup && 
-      <div className="formComp">
-        <div>Alert !!!</div>
-        <button className="closebtn" onClick={()=>setOpenPopup(false)}><i className="fa fa-times" aria-hidden="true"></i></button>
-        <div style={{ color: darkMode ? "white" : "" }}>Hello User! <br/>If you Want to Access Please Provide the Password or Contact Admin ... :)</div>
-        <div className="password">
-          <input type="text" className="user" name="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} ref={(input) => { setPasswordField(input); }}/>
-          <button className="button" onClick={handelPassword}>Submit</button>
-        </div>
-      </div>}
+      { openPopup &&
+        <div className="formComp1">
+          <div>Alert !!!</div>
+          <button className="closebtn" onClick={()=>setOpenPopup(false)}><i className="fa fa-times" aria-hidden="true"></i></button>
+          <div style={{ color: darkMode ? "white" : "" }}>Hello User! <br/>If you Want to Access Please Provide the Password or Contact Admin ... :)</div>
+          <div className="password">
+            <input type="text" className="user" name="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} ref={(input) => { setPasswordField(input); }}/>
+            <button className="button" onClick={handelPassword}>Submit</button>
+            {errorField ? <div className="wrongpasscode1" style={{ color: darkMode ? "white" : "", 'padding-top': "1rem" }}>Oops !! Wrong Password</div> : ""}
+          </div>
+        </div>}
       <div className="i-left">
         <div className="i-name">
           <span style={{ color: darkMode ? "white" : "" }}>Hy! I Am</span>
@@ -59,12 +66,12 @@ const Intro = () => {
             </Link>
           </span>
           <span>
-            {process.env.REACT_APP_PUBLIC_ACCESS === "true" ? 
-            <a href={process.env.REACT_APP_RESUME} target="_blank" rel="noreferrer" download>
-              <button className="button i-button2">Download CV</button>
-            </a>
-            :
-            <button className="button i-button2" onClick={handelPassword}>Download CV</button>
+            {process.env.REACT_APP_PUBLIC_ACCESS === "true" ?
+              <a href={process.env.REACT_APP_RESUME} target="_blank" rel="noreferrer" download>
+                <button className="button i-button2">Download CV</button>
+              </a>
+              :
+              <button className="button i-button2" onClick={handelPassword}>Download CV</button>
             }
           </span>
         </div>

@@ -57,15 +57,18 @@ const Projects = () => {
   ];
   const [openPopup,setOpenPopup] = useState(false)
   const [password, setPassword] = useState("");
-  const [passwordField, setPasswordField] = useState(null);
   const [viewLink, setViewLink] = useState(false);
+  const [errorField, setErrorField] = useState(false);
   const theme = useContext(themeContext);
   const darkMode = theme.state.darkMode;
   const handelPassword = (e) => {
     e.preventDefault();
     setOpenPopup(true);
+    const inputElement = document.querySelector('.password input');
     if (password !== process.env.REACT_APP_ACCESS_PASSWORD) {
-      return passwordField.classList.add("error");
+      password.length ? setErrorField(true) : setErrorField(false) 
+      setPassword("");
+      return inputElement.classList.add("error");
     }
     setOpenPopup(false);
     setPassword("");
@@ -99,8 +102,9 @@ const Projects = () => {
                   <button className="closebtn" onClick={() => setOpenPopup(false)}><i className="fa fa-times" aria-hidden="true"></i></button>
                   <div style={{ color: darkMode ? "white" : "" }}>Hello User! <br />If you Want to Access Please Provide the Password or Contact Admin ... :)</div>
                   <div className="password">
-                    <input type="text" className="user" name="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} ref={(input) => { setPasswordField(input); }} />
+                    <input type="text" className="user" name="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                     <button className="button" onClick={handelPassword}>Submit</button>
+                    { errorField ? <div className="wrongpasscode" style={{ color: darkMode ? "white" : "" }}>Oops !! Wrong Password</div>:""}
                   </div>
                 </div>}
               <div className="projects">
